@@ -5,7 +5,7 @@
  */
 #include "ShortestPath.hpp"
 
-string ShortestPath::findShortestPath(ariel::Graph &g, int source, int destination)
+string ShortestPath::findShortestPath(const ariel::Graph &g, int source, int destination)
 {
     // Validate input vertices to ensure they are within the valid range
     if (source < 0 || destination < 0 || source >= g.getNumVertices() || destination >= g.getNumVertices())
@@ -14,38 +14,38 @@ string ShortestPath::findShortestPath(ariel::Graph &g, int source, int destinati
     }
 
     // Convert vertices to size_t for array indexing
-    size_t numVertices = static_cast<size_t>(g.getNumVertices());
+    size_t numVertices = g.getNumVertices();
     size_t s = static_cast<size_t>(source);
     size_t v = static_cast<size_t>(destination);
 
     // Initialize distance array and predecessor array for shortest path computation
-    vector<int> d(numVertices, __INT_MAX__); // Array to store shortest distances
-    vector<int> predecessor(numVertices, -1); // Array to store predecessors in shortest path
-    vector<vector<int>> matrix = g.getMatrix(); // Adjacency matrix representing the graph
+    vector<int> d(numVertices, __INT_MAX__); 
+    vector<int> predecessor(numVertices, -1); 
+    
 
     // Choose the shortest path algorithm based on the weight type of the graph
     switch (g.getWeightType())
     {
-        case 0: // Unweighted graph
-            SearchAlgorithms::bfs(matrix, s, d, predecessor);
+        // Unweighted graph
+        case 0: 
+            SearchAlgorithms::bfs(g, s, d, predecessor);
             break;
-    
-        case 1: // Weighted graph
-            ShortestPathAlgorithms::dijkstra(matrix, s, d, predecessor);
+        // Weighted graph
+        case 1: 
+            ShortestPathAlgorithms::dijkstra(g, s, d, predecessor);
             break;
-
-        case 2: // Negative weighted graph
-            // Ensure meaningful interpretation for negative weighted graphs
+        // Negative weighted graph
+        case 2: 
             if (g.isUnDirected())
             {
                 throw std::invalid_argument("No meaning for shortest path in Undirected graph with negative weights!");
             }
 
             // Apply Bellman-Ford algorithm for negative weighted directed graphs
-            string valid = ShortestPathAlgorithms::bellmanFord(matrix, s, d, predecessor);
+            string valid = ShortestPathAlgorithms::bellmanFord(g, s, d, predecessor);
             if (valid != "ok")
             {
-                return "-1"; // Error message for negative cycle in the graph
+                return "-1"; 
             }
             break;
     }
@@ -53,7 +53,7 @@ string ShortestPath::findShortestPath(ariel::Graph &g, int source, int destinati
     // Check if a path exists from source to destination
     if (predecessor[v] == -1)
     {
-        return "-1"; // Return -1 if no path exists
+        return "-1"; 
     }
 
     // Reconstruct the shortest path from destination to source
@@ -61,10 +61,10 @@ string ShortestPath::findShortestPath(ariel::Graph &g, int source, int destinati
     
     while (predecessor[v] != -1)
     {
-        shortestPath.insert(0, "->" + to_string(v)); // Append vertex to the path string
-        v = static_cast<size_t>(predecessor[v]); // Move to the predecessor
+        shortestPath.insert(0, "->" + to_string(v)); 
+        v = static_cast<size_t>(predecessor[v]); 
     }
-    shortestPath.insert(0, to_string(v)); // Add the source vertex to the beginning of the path
+    shortestPath.insert(0, to_string(v)); 
     
-    return shortestPath; // Return the shortest path as a string
+    return shortestPath; 
 }

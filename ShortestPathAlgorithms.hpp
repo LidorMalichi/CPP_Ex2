@@ -31,7 +31,7 @@ public:
      * @param d Vector to store the shortest distances from the source vertex.
      * @param predecessor Vector to store the predecessors of vertices in the shortest paths.
      */
-    static void dijkstra(vector<vector<int>> &matrix, size_t source, vector<int> &d, vector<int> &predecessor);
+    static void dijkstra(const ariel::Graph &g, size_t source, vector<int> &d, vector<int> &predecessor);
 
     /**
      * Perform Bellman-Ford algorithm to find the shortest paths from a source vertex to all other vertices in a graph.
@@ -42,7 +42,7 @@ public:
      * @param predecessor Vector to store the predecessors of vertices in the shortest paths.
      * @return A string indicating the presence of negative cycles in the graph.
      */
-    static std::string bellmanFord(vector<vector<int>> &matrix, size_t source, vector<int> &d, vector<int> &predecessor);
+    static std::string bellmanFord(const ariel::Graph &g, size_t source, vector<int> &d, vector<int> &predecessor);
 };
 
 #endif

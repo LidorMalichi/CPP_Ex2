@@ -20,7 +20,7 @@ enum colorBi {
 class BipartiteAlgorithm {
 public:
     // Function to check if the graph is bipartite and return a string indicating the result
-    static std::string Bipartite(ariel::Graph &g);
+    static std::string Bipartite(const ariel::Graph &g);
 };
 
 #endif

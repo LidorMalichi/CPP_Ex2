@@ -23,7 +23,7 @@ public:
      * @param destination The destination vertex.
      * @return A string representing the shortest path between source and destination vertices.
      */
-    static std::string findShortestPath(ariel::Graph &g, int source, int destination);
+    static std::string findShortestPath(const ariel::Graph &g, int source, int destination);
 
 };
 

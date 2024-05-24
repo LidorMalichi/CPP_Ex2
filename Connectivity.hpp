@@ -13,8 +13,8 @@
 
 class Connectivity {
 private:
-    static bool undirected_connectivity(ariel::Graph &g);
-    static bool directed_connectivity(ariel::Graph &g);
+    static bool undirected_connectivity(const ariel::Graph &g);
+    static bool directed_connectivity(const ariel::Graph &g);
 
 public:
     /**
@@ -23,7 +23,7 @@ public:
      * @param g The graph to check for connectivity.
      * @return true if the graph is connected, false otherwise.
      */
-    static bool connected(ariel::Graph &g);
+    static bool connected(const ariel::Graph &g);
 };
 
 #endif

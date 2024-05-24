@@ -5,7 +5,7 @@
  */
 #include "Connectivity.hpp"
 
-bool Connectivity::connected(ariel::Graph &g)
+bool Connectivity::connected(const ariel::Graph &g)
 {
     // Check if the graph is undirected
     if(g.isUnDirected())
@@ -17,16 +17,16 @@ bool Connectivity::connected(ariel::Graph &g)
     return directed_connectivity(g);
 }
 
-bool Connectivity::undirected_connectivity(ariel::Graph &g)
+bool Connectivity::undirected_connectivity(const ariel::Graph &g)
 {
-    size_t numVertice = static_cast<size_t>(g.getNumVertices());
+    size_t numVertice = g.getNumVertices();
 
     // Initialize predecessor vector and get the adjacency matrix of the graph
     vector<int> predecessor(numVertice, -1);
     vector<vector<int>> matrix = g.getMatrix();
 
     // Perform Depth-First Search (DFS) on the graph to find connected components
-    SearchAlgorithms::dfs(matrix, predecessor);
+    SearchAlgorithms::dfs(g, predecessor);
 
     int count = 0;
 
@@ -49,16 +49,16 @@ bool Connectivity::undirected_connectivity(ariel::Graph &g)
     return true;
 }
 
-bool Connectivity::directed_connectivity(ariel::Graph &g)
+bool Connectivity::directed_connectivity(const ariel::Graph &g)
 {
-    size_t numVertice = static_cast<size_t>(g.getNumVertices());
+    size_t numVertice = g.getNumVertices();
 
     // Initialize predecessor vector and get the adjacency matrix of the graph
     vector<int> predecessor(numVertice, -1);
     vector<vector<int>> matrix = g.getMatrix();
 
     // Perform DFS on the graph to find connected components
-    SearchAlgorithms::dfs(matrix, predecessor);
+    SearchAlgorithms::dfs(g, predecessor);
 
     int count1 = 0;
 
@@ -72,10 +72,11 @@ bool Connectivity::directed_connectivity(ariel::Graph &g)
     }
 
     // Get the transpose of the adjacency matrix for directed graphs
-    vector<vector<int>> transpose = g.getTranspose();
+    ariel::Graph gTranspose;
+    gTranspose.loadGraph(g.getTranspose());
 
     // Perform DFS on the transpose graph to find connected components
-    SearchAlgorithms::dfs(transpose, predecessor);
+    SearchAlgorithms::dfs(gTranspose, predecessor);
 
     int count2 = 0;
 

@@ -33,7 +33,7 @@ namespace ariel {
         this->undirected = true;
         this->weightType = Unweighted;
 
-        int numEdges = 0;
+        size_t numEdges = 0;
 
         // Check properties of the matrix
         for (size_t i = 0; i < rows; i++) {
@@ -62,8 +62,7 @@ namespace ariel {
         }
     }
 
-    void Graph::printGraph()
-    {
+    void Graph::printGraph() const{
         string s1, s2;
 
         s1 = "An Undirected ";
@@ -76,25 +75,25 @@ namespace ariel {
         cout << s1 << s2 << "with " << this->num_of_vertices << " vertices and " << this->num_of_edges << " edges." << endl;
     }
 
-    int Graph::getNumVertices()
-    {
+    bool Graph::isEmpty() const{
+        return this->graph.empty();
+    }
+
+    size_t Graph::getNumVertices() const{
         return this->num_of_vertices;
     }
 
-    int Graph::getNumEdges()
-    {
+    size_t Graph::getNumEdges() const{
         return this->num_of_edges;
     }
 
-    vector<vector<int>> Graph::getMatrix()
-    {
+    vector<vector<int>> Graph::getMatrix() const{
         return this->graph;
     }
 
-    vector<vector<int>> Graph::getTranspose()
-    {
-        size_t numVertices = static_cast<size_t>(this->num_of_vertices);
-        vector<vector<int>> transpose(numVertices, vector<int>(numVertices));
+    vector<vector<int>> Graph::getTranspose() const{
+        
+        vector<vector<int>> transpose(this->num_of_vertices, vector<int>(this->num_of_vertices));
 
         for (size_t i = 0; i < this->num_of_vertices; i++)
         {
@@ -106,14 +105,230 @@ namespace ariel {
         return transpose;
     }
 
-    bool Graph::isUnDirected()
-    {
+    bool Graph::isUnDirected() const{
         return this->undirected;
     }
 
-    int Graph::getWeightType()
-    {
+    int Graph::getWeightType() const{
         return this->weightType;
+    }
+
+    vector<int> &Graph::operator[](size_t index)
+    {
+        if(isEmpty())
+        {
+            throw std::invalid_argument("Graph is empty");
+        }
+        return this->graph[index];
+    }
+
+    const vector<int> &Graph::operator[](size_t index) const
+    {
+        if(isEmpty())
+        {
+            throw std::invalid_argument("Graph is empty");
+        }
+        return this->graph[index];
+    }
+
+    Graph &Graph::operator+=(const Graph &g2)
+    {
+        if(isEmpty() || g2.isEmpty())
+        {
+            throw std::invalid_argument("Graphs are empty");
+        }
+        else if(this->num_of_vertices!= g2.getNumVertices())
+        {
+            throw std::invalid_argument("Graphs aren't the same size");
+        }
+
+        for (size_t i = 0; i < this->num_of_vertices; i++)
+        {
+            for (size_t j = 0; j < this->num_of_vertices; j++)
+            {
+                (*this)[i][j] += g2[i][j];
+            }
+            
+        }
+        this->loadGraph(this->getMatrix());
+        return *this;
+    }
+
+    Graph &Graph::operator-=(const Graph &g2)
+    {
+        if(isEmpty() || g2.isEmpty())
+        {
+            throw std::invalid_argument("Graphs are empty");
+        }
+        else if(this->num_of_vertices!= g2.getNumVertices())
+        {
+            throw std::invalid_argument("Graphs aren't the same size");
+        }
+
+        for (size_t i = 0; i < this->num_of_vertices; i++)
+        {
+            for (size_t j = 0; j < this->num_of_vertices; j++)
+            {
+                (*this)[i][j] -= g2[i][j];
+            }
+            
+        }
+        this->loadGraph(this->getMatrix());
+        return *this;
+    }
+
+    Graph& Graph::operator+()
+    {
+        if(isEmpty())
+        {
+            throw std::invalid_argument("Graph is empty");
+        }
+        return *this;
+    }
+
+    Graph& Graph::operator-()
+    {
+        if(isEmpty())
+        {
+            throw std::invalid_argument("Graph is empty");
+        }
+
+        this->weightType = Unweighted;
+
+        for (size_t i = 0; i < this->num_of_vertices; i++)
+        {
+            for (size_t j = 0; j < this->num_of_vertices; j++)
+            {
+                (*this)[i][j] = -(*this)[i][j];
+
+                if ((*this)[i][j] > 1 && this->weightType == Unweighted) {
+                    this->weightType = Weighted;
+                }
+
+                if ((*this)[i][j] < 0) {
+                    this->weightType = NegativeWeighted;
+                }
+
+            }
+            
+        }
+        
+       return *this; 
+    }
+
+    Graph &Graph::operator++()
+    {
+        if(isEmpty())
+        {
+            throw std::invalid_argument("Graph is empty");
+        }
+        for (size_t i = 0; i < this->num_of_vertices; i++)
+        {
+            for (size_t j = 0; j < num_of_vertices; j++)
+            {
+                if(i != j && (*this)[i][j] != 0)
+                {
+                    (*this)[i][j]++;
+                }
+                 
+            }
+            
+        }
+        this->loadGraph(this->getMatrix());
+        return *this;
+        
+    }
+
+    Graph Graph::operator++(int)
+    {
+        if(isEmpty())
+        {
+            throw std::invalid_argument("Graph is empty");
+        }
+
+        Graph temp = *this;
+        for (size_t i = 0; i < this->num_of_vertices; i++)
+        {
+            for (size_t j = 0; j < num_of_vertices; j++)
+            {
+                if(i != j && (*this)[i][j] != 0)
+                {
+                    (*this)[i][j]++;
+                }
+                 
+            }
+            
+        }
+        this->loadGraph(this->getMatrix());
+        return temp;
+
+    }
+
+    Graph &Graph::operator--()
+    {
+        if(isEmpty())
+        {
+            throw std::invalid_argument("Graph is empty");
+        }
+        for (size_t i = 0; i < this->num_of_vertices; i++)
+        {
+            for (size_t j = 0; j < num_of_vertices; j++)
+            {
+                if(i != j && (*this)[i][j] != 0)
+                {
+                    (*this)[i][j]--;
+                }
+                 
+            }
+            
+        }
+
+        this->loadGraph(this->getMatrix());
+        return *this;
+    }
+
+    Graph Graph::operator--(int)
+    {
+        if(isEmpty())
+        {
+            throw std::invalid_argument("Graph is empty");
+        }
+
+        Graph temp = *this;
+        for (size_t i = 0; i < this->num_of_vertices; i++)
+        {
+            for (size_t j = 0; j < num_of_vertices; j++)
+            {
+                if(i != j && (*this)[i][j] != 0)
+                {
+                    (*this)[i][j]--;
+                }
+                 
+            }
+            
+        }
+        this->loadGraph(this->getMatrix());
+        return temp;
+    }
+
+    Graph &Graph::operator*=(int scalar)
+    {
+        if(this->graph.empty())
+        {
+            throw std::invalid_argument("Graph is empty");
+        }
+
+        for (size_t i = 0; i < this->num_of_vertices; i++)
+        {
+            for (size_t j = 0; j < this->num_of_vertices; j++)
+            {
+                (*this)[i][j] *= scalar;
+            }
+            
+        }
+        this->loadGraph(this->graph);
+        return *this;
+        
     }
 
 } // namespace ariel

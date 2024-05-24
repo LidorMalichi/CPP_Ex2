@@ -33,7 +33,7 @@ class SearchAlgorithms{
      * @param predeccesor The predecessor vector for DFS.
      * @param color The color vector for DFS.
      */
-    static void dfs_visit(size_t vertice, vector<vector<int>> &matrix, vector<int> &predeccesor, vector<int> &color);
+    static void dfs_visit(size_t vertice, const ariel::Graph &g, vector<int> &predeccesor, vector<int> &color);
 
     /**
      * Helper function for depth-first search (DFS) visit with timestamps and edge classification.
@@ -47,7 +47,7 @@ class SearchAlgorithms{
      * @param edgeClass The edge classification vector for DFS.
      * @param isUndirected Flag indicating if the graph is undirected (default: false).
      */
-    static void dfs_visit(size_t vertice, vector<vector<int>> &matrix, int &cur_time, vector<int> &d, vector<int> &f, vector<int> &predeccesor, vector<int> &color, vector<vector<char>> &edgeClass, bool isUndirected = false);
+    static void dfs_visit(size_t vertice, const ariel::Graph &g, int &cur_time, vector<int> &d, vector<int> &f, vector<int> &predeccesor, vector<int> &color, vector<vector<char>> &edgeClass, bool isUndirected = false);
 
 public:
 
@@ -58,14 +58,14 @@ public:
      * @param d The distance vector for BFS.
      * @param predeccesor The predecessor vector for BFS.
      */
-    static void bfs(vector<vector<int>> &matrix, size_t source, vector<int> &d, vector<int> &predeccesor);
+    static void bfs(const ariel::Graph &g, size_t source, vector<int> &d, vector<int> &predeccesor);
 
     /**
      * Depth-first search (DFS) algorithm without timestamps and edge classification.
      * @param matrix The adjacency matrix representing the graph.
      * @param predeccesor The predecessor vector for DFS.
      */
-    static void dfs(vector<vector<int>> &matrix, vector<int> &predeccesor);
+    static void dfs(const ariel::Graph &g, vector<int> &predeccesor);
 
     /**
      * Depth-first search (DFS) algorithm with timestamps and edge classification.
@@ -74,7 +74,7 @@ public:
      * @param edgeClass The edge classification vector for DFS.
      * @param isUndirected Flag indicating if the graph is undirected.
      */
-    static void dfs(vector<vector<int>> &matrix, vector<int> &predeccesor, vector<vector<char>> &edgeClass, bool isUndirected);
+    static void dfs(const ariel::Graph &g, vector<int> &predeccesor, vector<vector<char>> &edgeClass, bool isUndirected);
 };
 
 #endif

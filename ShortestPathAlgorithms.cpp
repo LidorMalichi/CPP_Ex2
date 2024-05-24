@@ -15,62 +15,66 @@ void ShortestPathAlgorithms::relax(size_t u, size_t v, int edgeWeight, vector<in
     }
 }
 
-void ShortestPathAlgorithms::dijkstra(vector<vector<int>> &matrix, size_t source, vector<int> &d, vector<int> &predecessor)
+void ShortestPathAlgorithms::dijkstra(const ariel::Graph &g, size_t source, vector<int> &d, vector<int> &predecessor)
 {
     priority_queue<pair<size_t, int>, vector<pair<size_t, int>>, Compare> q;
 
+    size_t numVertices = g.getNumVertices();
+
     // Initialize priority queue with vertices and their corresponding distances
-    for(size_t v = 0; v < matrix[0].size(); v++)
+    for(size_t v = 0; v < numVertices; v++)
     {
         q.push({v, d[v]});
     }
-    d[source] = 0; // Set distance of source vertex to 0
+    d[source] = 0; 
     
     while(!q.empty())
     {
         pair<size_t, int> u = q.top();
         q.pop();
 
-        for(size_t v = 0; v < matrix[0].size(); v++)
+        for(size_t v = 0; v < numVertices; v++)
         {
             // Perform relaxation for adjacent vertices with non-zero weight edges
-            if(matrix[u.first][v] != 0 && d[u.first] != __INT_MAX__)
+            if(g[u.first][v] != 0 && d[u.first] != __INT_MAX__)
             {
-                relax(u.first, v, matrix[u.first][v], d, predecessor);
+                relax(u.first, v, g[u.first][v], d, predecessor);
             }
         }
     }
 }
 
-string ShortestPathAlgorithms::bellmanFord(vector<vector<int>> &matrix, size_t source, vector<int> &d, vector<int> &predecessor)
+string ShortestPathAlgorithms::bellmanFord(const ariel::Graph &g, size_t source, vector<int> &d, vector<int> &predecessor)
 {
-    d[source] = 0; // Set distance of source vertex to 0
+    d[source] = 0;
+
+    size_t numVertices = g.getNumVertices();
 
     // Relaxation process for |V| - 1 iterations
-    for(int k = 0; k < matrix[0].size() - 1; k++)
+    for(int k = 0; k < numVertices - 1; k++)
     {
-        for(size_t u = 0; u < matrix[0].size(); u++)
+        for(size_t u = 0; u < numVertices; u++)
         {
-            for(size_t v = 0; v < matrix[0].size(); v++)
+            for(size_t v = 0; v < numVertices; v++)
             {
                 // Perform relaxation for edges with non-zero weight and update distances
-                if(matrix[u][v] != 0 && d[u] != __INT_MAX__)
+                if(g[u][v] != 0 && d[u] != __INT_MAX__)
                 {
-                    relax(u, v, matrix[u][v], d, predecessor);
+                    relax(u, v, g[u][v], d, predecessor);
                 }
             }
         }
     }
 
     // Check for negative cycles
-    for(size_t u = 0; u < matrix[0].size(); u++)
+    for(size_t u = 0; u < numVertices; u++)
     {
-        for(size_t v = 0; v < matrix[0].size(); v++)
+        for(size_t v = 0; v < numVertices; v++)
         {
             // If a shorter path is found, return error message indicating a negative cycle
-            if(matrix[u][v] != 0)
+            if(g[u][v] != 0)
             {
-                if(d[v] > d[u] + matrix[u][v]){
+                if(d[v] > d[u] + g[u][v]){
                     return "Error: Negative cycle";
                 }
             }

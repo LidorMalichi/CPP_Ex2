@@ -6,113 +6,116 @@
 
 #include "SearchAlgorithms.hpp"
 
-void SearchAlgorithms::dfs_visit(size_t vertice, vector<vector<int>> &matrix, vector<int> &predecessor, vector<int> &color)
+void SearchAlgorithms::dfs_visit(size_t vertice, const ariel::Graph &g, vector<int> &predecessor, vector<int> &color)
 {
-    color[vertice] = GRAY; // Mark current vertex as visited
+    color[vertice] = GRAY; 
 
     for(size_t v = 0; v < color.size(); v++)
     {
-        if(matrix[vertice][v] != 0 && color[v] == WHITE)
+        if(g[vertice][v] != 0 && color[v] == WHITE)
         {
-            predecessor[v] = vertice; // Set predecessor for the next vertex in the DFS traversal
-            dfs_visit(v, matrix, predecessor, color); // Recursive call for the next vertex
+            predecessor[v] = vertice; 
+            dfs_visit(v, g, predecessor, color); 
         }
     }
 }
 
-void SearchAlgorithms::dfs(vector<vector<int>> &matrix, vector<int> &predecessor)
+void SearchAlgorithms::dfs(const ariel::Graph &g, vector<int> &predecessor)
 {
-    vector<int> color(matrix[0].size(), WHITE); // Initialize color vector for DFS
+    // Initialize color vector for DFS
+    vector<int> color(g.getNumVertices(), WHITE); 
 
     for(size_t v = 0; v < color.size(); v++)
     {
         if(color[v] == WHITE){
-            dfs_visit(v, matrix, predecessor, color); // Start DFS traversal from each unvisited vertex
+            dfs_visit(v, g, predecessor, color);
         }
     }
 }
 
-void SearchAlgorithms::dfs_visit(size_t vertice, vector<vector<int>> &matrix, int &cur_time, vector<int> &d_time, vector<int> &f_time, vector<int> &predecessor, vector<int> &color, vector<vector<char>> &edgeClass, bool isUndirected)
+void SearchAlgorithms::dfs_visit(size_t vertice, const ariel::Graph &g, int &cur_time, vector<int> &d_time, vector<int> &f_time, vector<int> &predecessor, vector<int> &color, vector<vector<char>> &edgeClass, bool isUndirected)
 {
-    color[vertice] = GRAY; // Mark current vertex as visited
+    color[vertice] = GRAY; 
     cur_time++;
-    d_time[vertice] = cur_time; // Set discovery time for the current vertex
+    d_time[vertice] = cur_time; 
 
+    //Classify every edge on the graph while performing dfs traversal
     for(size_t v = 0; v < color.size(); v++)
     {
-        if(matrix[vertice][v] != 0)
+        if(g[vertice][v] != 0 && edgeClass[vertice][v] == NOT_CLASS)
         {
-            if(isUndirected && edgeClass[vertice][v] == NOT_CLASS) // Check for undirected graph and unclassified edge
+            if(isUndirected)
             {
                 if(color[v] == GRAY)
                 {
-                    edgeClass[vertice][v] = BACK_EDGE; // Mark edge as back edge
+                    edgeClass[vertice][v] = BACK_EDGE; 
                     edgeClass[v][vertice] = VISITED_EDGE;
                 }
-                if(color[v] == WHITE)
+                else if(color[v] == WHITE)
                 {
-                    edgeClass[vertice][v] = TREE_EDGE; // Mark edge as tree edge
+                    edgeClass[vertice][v] = TREE_EDGE; 
                     edgeClass[v][vertice] = VISITED_EDGE;
-                    predecessor[v] = vertice; // Set predecessor for the next vertex in the DFS traversal
-                    dfs_visit(v, matrix, cur_time, d_time, f_time, predecessor, color, edgeClass, isUndirected); // Recursive call for the next vertex
+                    predecessor[v] = vertice; 
+                    dfs_visit(v, g, cur_time, d_time, f_time, predecessor, color, edgeClass, isUndirected); 
                 }
             }
-            if(!isUndirected && edgeClass[vertice][v] == NOT_CLASS) // Check for directed graph and unclassified edge
+            else
             {
-                if(color[v] == BLACK)
+                switch(color[v])
                 {
-                    if(d_time[vertice] < d_time[v])
+                    case BLACK:
                     {
-                        edgeClass[vertice][v] = FORWARD_EDGE; // Mark edge as forward edge
+                        edgeClass[vertice][v] = d_time[vertice] < d_time[v] ? FORWARD_EDGE : CROSS_EDGE;
+                        break;
                     }
-                    else
+                    case GRAY:
                     {
-                        edgeClass[vertice][v] = CROSS_EDGE; // Mark edge as cross edge
+                        edgeClass[vertice][v] = BACK_EDGE;
+                        break; 
+                    }
+                    case WHITE:
+                    { 
+                        edgeClass[vertice][v] = TREE_EDGE; 
+                        predecessor[v] = vertice; 
+                        dfs_visit(v, g, cur_time, d_time, f_time, predecessor, color, edgeClass, isUndirected);
+                        break; 
                     }
                 }
-                if(color[v] == GRAY)
-                {
-                    edgeClass[vertice][v] = BACK_EDGE; // Mark edge as back edge
-                }
-                if (color[v] == WHITE)
-                {
-                    edgeClass[vertice][v] = TREE_EDGE; // Mark edge as tree edge
-                    predecessor[v] = vertice; // Set predecessor for the next vertex in the DFS traversal
-                    dfs_visit(v, matrix, cur_time, d_time, f_time, predecessor, color, edgeClass, isUndirected); // Recursive call for the next vertex
-                }
+                
             }
         }
     }
 
-    color[vertice] = BLACK; // Mark current vertex as finished
+    color[vertice] = BLACK; 
     cur_time++;
-    f_time[vertice] = cur_time; // Set finish time for the current vertex
+    f_time[vertice] = cur_time; 
 }
 
-void SearchAlgorithms::dfs(vector<vector<int>> &matrix, vector<int> &predecessor, vector<vector<char>> &edgeClass, bool isUndirected)
+void SearchAlgorithms::dfs(const ariel::Graph &g, vector<int> &predecessor, vector<vector<char>> &edgeClass, bool isUndirected)
 {
-    size_t numVertice = matrix[0].size();
+    // Initialize discovery time, finish time and color vector for DFS
+    size_t numVertice = g.getNumVertices();
 
-    vector<int> d_time(numVertice, 0); // Initialize discovery time vector
-    vector<int> f_time(numVertice, 0); // Initialize finish time vector
-    vector<int> color(numVertice, WHITE); // Initialize color vector for DFS
+    vector<int> d_time(numVertice, 0); 
+    vector<int> f_time(numVertice, 0); 
+    vector<int> color(numVertice, WHITE); 
 
     int cur_time = 0;
 
     for(size_t v = 0; v < color.size(); v++)
     {
         if(color[v] == WHITE){
-            dfs_visit(v, matrix, cur_time, d_time, f_time, predecessor, color, edgeClass, isUndirected); // Start DFS traversal from each unvisited vertex
+            dfs_visit(v, g, cur_time, d_time, f_time, predecessor, color, edgeClass, isUndirected); 
         }
     }
 }
 
-void SearchAlgorithms::bfs(vector<vector<int>> &matrix, size_t source, vector<int> &d, vector<int> &predecessor)
+void SearchAlgorithms::bfs(const ariel::Graph &g, size_t source, vector<int> &d, vector<int> &predecessor)
 {
-    vector<int> color(matrix.size(), WHITE); // Initialize color vector for BFS
+    vector<int> color(g.getNumVertices(), WHITE); 
 
-    color[source] = GRAY; // Mark source vertex as visited
-    d[source] = 0; // Set distance from source to itself as 0
+    color[source] = GRAY; 
+    d[source] = 0; 
 
     queue<size_t> q;
     q.push(source);
@@ -124,14 +127,14 @@ void SearchAlgorithms::bfs(vector<vector<int>> &matrix, size_t source, vector<in
 
         for(size_t v = 0; v < color.size(); v++)
         {
-            if(matrix[u][v] != 0 && color[v] == WHITE)
+            if(g[u][v] != 0 && color[v] == WHITE)
             {
-                color[v] = GRAY; // Mark adjacent vertex as visited
-                d[v] = d[u] + 1; // Update distance from source to adjacent vertex
-                predecessor[v] = u; // Set predecessor for the adjacent vertex
-                q.push(v); // Add adjacent vertex to the queue for further traversal
+                color[v] = GRAY; 
+                d[v] = d[u] + 1; 
+                predecessor[v] = u; 
+                q.push(v); 
             }
         }
-        color[u] = BLACK; // Mark current vertex as finished
+        color[u] = BLACK; 
     }
 }

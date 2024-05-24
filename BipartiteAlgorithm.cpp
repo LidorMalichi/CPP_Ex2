@@ -6,41 +6,43 @@
 #include "BipartiteAlgorithm.hpp"
 
 // Implementation of the Bipartite method to check if the graph is bipartite
-std::string BipartiteAlgorithm::Bipartite(ariel::Graph &g) {
-    // Get the adjacency matrix of the graph
-    std::vector<std::vector<int>> matrix = g.getMatrix();
-    size_t numVertice = matrix.size();  // Get the number of vertices in the graph
-
-    std::vector<int> color(numVertice, -1);  // Create a vector to store colors for each vertex
+std::string BipartiteAlgorithm::Bipartite(const ariel::Graph &g) {
+    
+    size_t numVertice = g.getNumVertices();  
+    
+    // Create a vector to store colors for each vertex
+    std::vector<int> color(numVertice, -1);  
 
     // Iterate through each vertex
     for (size_t i = 0; i < numVertice; i++) {
         // Check if the vertex already has a color assigned
         if (color[i] != -1) {
-            continue;  // Skip if the vertex already has a color
+            continue;  
         }
-
-        std::queue<size_t> q;  // Create a queue for BFS traversal
-        q.push(i);  // Push the current vertex to the queue
-        color[i] = RED;  // Assign red color to the current vertex
+    
+        // Create a queue for BFS traversal
+        std::queue<size_t> q;  
+        q.push(i);  
+        color[i] = RED;  
 
         // Perform BFS traversal
         while (!q.empty()) {
-            size_t u = q.front();  // Get the front element of the queue
-            q.pop();  // Remove the front element from the queue
+            size_t u = q.front();  
+            q.pop();  
 
             // Traverse adjacent vertices of vertex u
             for (size_t v = 0; v < numVertice; v++) {
-                // Check if there is an edge between u and v
-                if (matrix[u][v] != 0) {
+            
+                if (g[u][v] != 0) {
                     // Check if vertex v has no color assigned
                     if (color[v] == -1) {
-                        color[v] = 1 - color[u];  // Assign opposite color to v
-                        q.push(v);  // Push v to the queue for further traversal
-                    } else {
+                        color[v] = 1 - color[u];  
+                        q.push(v);  
+                    } 
+                    else {
                         // Check if v has the same color as u (indicating an odd cycle)
                         if (color[v] == color[u]) {
-                            return "0";  // Return 0 if an odd cycle is found
+                            return "0";  
                         }
                     }
                 }
@@ -55,10 +57,10 @@ std::string BipartiteAlgorithm::Bipartite(ariel::Graph &g) {
     // Iterate through vertices to populate sets A and B based on colors
     for (size_t v = 0; v < numVertice; v++) {
         if (color[v] == RED) {
-            setA.insert(setA.size() - 1, std::to_string(v) + ", ");  // Add vertex v to set A
+            setA.insert(setA.size() - 1, std::to_string(v) + ", "); 
         }
         if (color[v] == BLUE) {
-            setB.insert(setB.size() - 1, std::to_string(v) + ", ");  // Add vertex v to set B
+            setB.insert(setB.size() - 1, std::to_string(v) + ", ");  
         }
     }
 

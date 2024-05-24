@@ -20,8 +20,8 @@ namespace ariel{
     class Graph{
 
         vector<vector<int>> graph;
-        int num_of_vertices;
-        int num_of_edges;
+        size_t num_of_vertices;
+        size_t num_of_edges;
         bool undirected;
         WeightType weightType;
         
@@ -36,43 +36,68 @@ namespace ariel{
             /**
              * Prints the graph.
              */
-            void printGraph();
+            void printGraph() const;
+
+            bool isEmpty() const;
 
             /**
              * Gets the number of vertices in the graph.
              * @return The number of vertices.
              */
-            int getNumVertices();
+            size_t getNumVertices() const;
             
             /**
              * Gets the number of edges in the graph.
              * @return The number of edges.
              */
-            int getNumEdges();
+            size_t getNumEdges() const;
 
             /**
              * Gets the adjacency matrix of the graph.
              * @return The adjacency matrix.
              */
-            vector<vector<int>> getMatrix();
+            vector<vector<int>> getMatrix() const;
 
             /**
              * Gets the transpose of the adjacency matrix.
              * @return The transpose of the adjacency matrix.
              */
-            vector<vector<int>> getTranspose();
+            vector<vector<int>> getTranspose() const;
 
             /**
              * Checks if the graph is undirected.
              * @return True if the graph is undirected, false otherwise.
              */
-            bool isUnDirected();
+            bool isUnDirected() const;
             
             /**
              * Gets the weight type of the graph.
              * @return The weight type (Unweighted, Weighted, NegativeWeighted).
              */
-            int getWeightType();
+            int getWeightType() const;
+
+            vector<int>& operator[](size_t index);
+
+            const vector<int>& operator[](size_t index) const;
+
+            Graph& operator+=(const Graph& g2);
+
+            Graph& operator-=(const Graph& g2);
+
+            Graph& operator+();
+
+            Graph& operator-();
+
+            Graph& operator++();
+            
+            Graph operator++(int);
+
+            Graph& operator--();
+
+            Graph operator--(int);
+
+            Graph& operator*=(int scalar);
+
 
     };
 }

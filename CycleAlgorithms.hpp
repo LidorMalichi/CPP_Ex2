@@ -24,7 +24,7 @@ public:
      * @param negative Flag indicating whether to search for negative cycles.
      * @return A string indicating the cycle found, or an empty string if no cycle is found.
      */
-    static std::string findCycle(ariel::Graph &g, bool negative = false);
+    static std::string findCycle(const ariel::Graph &g, bool negative = false);
 };
 
 #endif

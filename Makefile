@@ -4,7 +4,7 @@ CXX=clang++
 CXXFLAGS=-std=c++11 -Werror -Wsign-conversion -g
 VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all  --error-exitcode=99
 
-SOURCES=Graph.cpp Algorithms.cpp SearchAlgorithms.cpp Connectivity.cpp ShortestPathAlgorithms.cpp ShortestPath.cpp CycleAlgorithms.cpp BipartiteAlgorithm.cpp
+SOURCES=Graph.cpp Algorithms.cpp SearchAlgorithms.cpp Connectivity.cpp ShortestPathAlgorithms.cpp ShortestPath.cpp CycleAlgorithms.cpp BipartiteAlgorithm.cpp GraphOperators.cpp
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
 run: demo
