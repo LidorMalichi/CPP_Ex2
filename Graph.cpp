@@ -113,6 +113,7 @@ namespace ariel {
         return this->weightType;
     }
 
+    // return g[index] : private function!
     vector<int> &Graph::operator[](size_t index)
     {
         if(isEmpty())
@@ -131,6 +132,7 @@ namespace ariel {
         return this->graph[index];
     }
 
+    // return const g[index]
     Graph &Graph::operator+=(const Graph &g2)
     {
         if(isEmpty() || g2.isEmpty())
@@ -154,6 +156,7 @@ namespace ariel {
         return *this;
     }
 
+    // this -= g2
     Graph &Graph::operator-=(const Graph &g2)
     {
         if(isEmpty() || g2.isEmpty())
@@ -177,6 +180,7 @@ namespace ariel {
         return *this;
     }
 
+    // +this
     Graph& Graph::operator+()
     {
         if(isEmpty())
@@ -186,6 +190,7 @@ namespace ariel {
         return *this;
     }
 
+    // -this
     Graph& Graph::operator-()
     {
         if(isEmpty())
@@ -216,6 +221,7 @@ namespace ariel {
        return *this; 
     }
 
+    // ++this
     Graph &Graph::operator++()
     {
         if(isEmpty())
@@ -239,6 +245,7 @@ namespace ariel {
         
     }
 
+    // this++
     Graph Graph::operator++(int)
     {
         if(isEmpty())
@@ -264,6 +271,7 @@ namespace ariel {
 
     }
 
+    // --this
     Graph &Graph::operator--()
     {
         if(isEmpty())
@@ -287,6 +295,7 @@ namespace ariel {
         return *this;
     }
 
+    // this--
     Graph Graph::operator--(int)
     {
         if(isEmpty())
@@ -311,6 +320,7 @@ namespace ariel {
         return temp;
     }
 
+    // this*=scalar
     Graph &Graph::operator*=(int scalar)
     {
         if(this->graph.empty())
@@ -331,6 +341,7 @@ namespace ariel {
         
     }
 
+    // this*=g2
     Graph &Graph::operator*=(const Graph &g2)
     {
         if(isEmpty() || g2.isEmpty())

@@ -78,26 +78,37 @@ namespace ariel{
              */
             int getWeightType() const;
 
+            // [] operator for matrix
             const vector<int>& operator[](size_t index) const;
 
+            // += operator
             Graph& operator+=(const Graph& g2);
 
+            // -= operator
             Graph& operator-=(const Graph& g2);
 
+            // + unary operator
             Graph& operator+();
 
+            // - unary operator
             Graph& operator-();
 
+            // ++ prefix operator
             Graph& operator++();
             
+            // ++ postfix operator
             Graph operator++(int);
 
+            // -- prefix operator
             Graph& operator--();
 
+            // -- postfix operator
             Graph operator--(int);
 
+            // *= scalar operator
             Graph& operator*=(int scalar);
 
+            // *= operator
             Graph& operator*=(const Graph& g2);
 
 

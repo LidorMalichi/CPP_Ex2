@@ -7,6 +7,7 @@
 
 namespace ariel{
 
+    //g1+g2
     Graph operator+(const Graph &g1, const Graph &g2)
     {
         if(g1.isEmpty() || g2.isEmpty())
@@ -39,7 +40,7 @@ namespace ariel{
     }
 
     
-
+    //g1-g2
     Graph operator-(const Graph &g1, const Graph &g2)
     {
         if(g1.isEmpty() || g2.isEmpty())
@@ -70,7 +71,7 @@ namespace ariel{
         return g;
     }
 
-
+    //g1 > g2
     bool operator>(const Graph &g1, const Graph &g2)
     {
         if(g1.isEmpty() || g2.isEmpty())
@@ -115,6 +116,7 @@ namespace ariel{
         
     }
 
+    //g1==g2
     bool operator==(const Graph &g1, const Graph &g2)
     {
         if(g1.isEmpty() || g2.isEmpty())
@@ -124,6 +126,7 @@ namespace ariel{
         return !(g1 > g2) && !(g2 > g1);
     }
 
+    //g1>=g2
     bool operator>=(const Graph &g1, const Graph &g2)
     {
         if(g1.isEmpty() || g2.isEmpty())
@@ -133,6 +136,7 @@ namespace ariel{
         return (g1 > g2) || (g1 == g2);
     }
 
+    //g1<g2
     bool operator<(const Graph &g1, const Graph &g2)
     {
         if(g1.isEmpty() || g2.isEmpty())
@@ -142,6 +146,7 @@ namespace ariel{
         return g2 > g1;
     }
 
+    //g1<=g2
     bool operator<=(const Graph &g1, const Graph &g2)
     {
         if(g1.isEmpty() || g2.isEmpty())
@@ -151,6 +156,7 @@ namespace ariel{
         return g2 >= g1;
     }
 
+    //g1!=g2
     bool operator!=(const Graph &g1, const Graph &g2)
     {
         if(g1.isEmpty() || g2.isEmpty())
@@ -160,6 +166,7 @@ namespace ariel{
         return !(g1 == g2);
     }
 
+    //g1*a
     Graph operator*(const Graph &g1, int scalar)
     {
         if(g1.isEmpty())
@@ -184,6 +191,7 @@ namespace ariel{
         return g;
     }
 
+    //g1*g2
     Graph operator*(const Graph &g1, const Graph &g2)
     {
         if(g1.isEmpty() || g2.isEmpty())
@@ -219,6 +227,8 @@ namespace ariel{
 
         return g;
     }
+
+    //<<g
     std::ostream &operator<<(std::ostream &os, const Graph &g)
     {
         if(g.isEmpty())
