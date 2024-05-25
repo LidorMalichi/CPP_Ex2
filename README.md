@@ -94,4 +94,3 @@ To delete files created during compilation and execution, use the following comm
 make clean
 ```
 
->>>>>>> bd00eb1 (Create README.md)
