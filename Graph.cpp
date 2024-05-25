@@ -331,4 +331,38 @@ namespace ariel {
         
     }
 
+    Graph &Graph::operator*=(const Graph &g2)
+    {
+        if(isEmpty() || g2.isEmpty())
+        {
+            throw std::invalid_argument("Graphs are empty");
+        }
+        else if(this->num_of_vertices != g2.getNumVertices())
+        {
+            throw std::invalid_argument("Graphs aren't the same size");
+        }
+
+        vector<vector<int>> matrix(this->num_of_vertices, vector<int>(this->num_of_vertices, 0));
+
+        for(size_t i = 0; i < this->num_of_vertices; i++)
+        {
+            for (size_t j = 0; j < this->num_of_vertices; j++)
+            {
+                for (size_t k = 0; k < this->num_of_vertices; k++)
+                {
+                    if(i != j)
+                    {
+                        matrix[i][j] += (*this)[i][k] * g2[k][j];
+                    }
+                }
+                
+            }
+            
+        }
+
+        this->loadGraph(matrix);
+
+        return *this;
+    }
+
 } // namespace ariel

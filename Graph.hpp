@@ -24,6 +24,8 @@ namespace ariel{
         size_t num_of_edges;
         bool undirected;
         WeightType weightType;
+
+        vector<int>& operator[](size_t index);
         
         public:
 
@@ -76,8 +78,6 @@ namespace ariel{
              */
             int getWeightType() const;
 
-            vector<int>& operator[](size_t index);
-
             const vector<int>& operator[](size_t index) const;
 
             Graph& operator+=(const Graph& g2);
@@ -97,6 +97,8 @@ namespace ariel{
             Graph operator--(int);
 
             Graph& operator*=(int scalar);
+
+            Graph& operator*=(const Graph& g2);
 
 
     };

@@ -471,6 +471,12 @@ TEST_CASE("Test graph multiplication")
 
     ss.str("");
 
+    g4 *= g5;
+    ss << g4;
+    CHECK(ss.str() == "[0, 1, 1, 1, 1]\n[2, 0, 1, 2, 1]\n[1, 1, 0, 1, 1]\n[2, 1, 1, 0, 1]\n[1, 1, 1, 1, 0]\n");
+
+    ss.str("");
+
     //Check multiplication with a scalar and creating a new garph
     ariel::Graph g7 = g1*4;
     ss << g7;
@@ -655,6 +661,35 @@ TEST_CASE("Test ++ --")
 
 }
 
+TEST_CASE("Complex operations")
+{
+    stringstream ss;
+
+    ariel::Graph g1;
+    vector<vector<int>> graph = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+    g1.loadGraph(graph);
+
+    ariel::Graph g2;
+    vector<vector<int>> weightedGraph = {
+        {0, 1, 1},
+        {1, 0, 2},
+        {1, 2, 0}};
+    g2.loadGraph(weightedGraph);
+
+    ariel::Graph g3 = g1 + g2 * (g1 - (++g2)); 
+    ss << g3;
+    CHECK(ss.str() == "[0, -3, -4]\n[-5, 0, -3]\n[-3, -1, 0]\n");
+
+    ss.str("");
+
+    ariel::Graph g4 = g1 * ((g2 += g1) - (g1--));
+    ss << g4;
+    CHECK(ss.str() == "[0, 0, 0]\n[0, 0, 0]\n[0, 0, 0]\n");
+}
+
 TEST_CASE("Invalid operations")
 {
     ariel::Graph g1;
@@ -692,10 +727,14 @@ TEST_CASE("Invalid operations")
     g6.loadGraph(graph3);
     CHECK_THROWS(g1 + g6);
 
+    //Check throw for an empty graph 
     ariel::Graph g7; 
     CHECK_THROWS(g7 + g5);
     CHECK_THROWS(g7 * g5);
+    CHECK_THROWS(g7 += g5);
+    CHECK_THROWS(g7 *= g5);
 
+    //Check throw on addition to existing graph with different dimensions
     CHECK_THROWS(g5 += g2);
     CHECK_THROWS(g5 -= g2);
 
