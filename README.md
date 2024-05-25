@@ -1,6 +1,4 @@
 
-# CPP_Ex2
-
 # Graph Algorithms and Operators Library
 
 ## Overview
